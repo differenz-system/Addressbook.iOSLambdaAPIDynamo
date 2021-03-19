@@ -2,51 +2,30 @@
 //  AddAddress.swift
 //  AddressBook
 //
-//  Created by MohiniPatel on 9/20/17.
-//  Copyright © 2017 Differenz System. All rights reserved.
+//  Created by Differenz System Pvt. Ltd.  on 03/16/2021.
+//  Copyright ©  2021 Differenz System Pvt. Ltd. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-protocol AddressDelegate {
-    
-    /**
-     This method is used to send information about newly added User.
-        - Parameter user: Newly created User object
-     */
-    func add(user: User)
-    
-    /**
-     This method is used to send information about updated User.
-     - Parameters:
-        - index: Array index of user object that is updated
-        - user: Updated User object
-     */
-    func replaceObject(at index: Int, with user: User)
-    
-    /**
-     This method is used to send information about deleted User.
-        - Parameter index: Array index of deleted User object
-     */
-    func deleteUser(at index: Int)
-}
+
 
 class AddAddressVC: BaseView, UITextFieldDelegate {
     
     //MARK: - IBoutlet
-    @IBOutlet weak var containerViewTopOutlet: NSLayoutConstraint!
-    @IBOutlet weak var bottomViewTopOutlet: NSLayoutConstraint!
+    
     @IBOutlet weak var activeSwitch: UISwitch!
     @IBOutlet weak var txtName: UITextField!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPhoneNo: UITextField!
     @IBOutlet weak var btnDelete: UIButton!
     @IBOutlet weak var btnSave: UIButton!
-    
+    @IBOutlet weak var btnBack: UIButton!
+    @IBOutlet weak var btnLogout: UIButton!
+    @IBOutlet weak var imgBg: UIImageView!
     //MARK: - variables
     
-    var delegate: AddressDelegate?
     var editUser: UserModel?
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var users = [User]()
@@ -79,7 +58,7 @@ class AddAddressVC: BaseView, UITextFieldDelegate {
      This method is used for initial configuration of Controller.
      */
     func initialConfig() {
-        self.setUpNavigationBar()
+       
         self.txtName.setAttributedPlaceHolder(with: .gray)
         self.txtEmail.setAttributedPlaceHolder(with: .gray)
         self.txtPhoneNo.setAttributedPlaceHolder(with: .gray)
@@ -105,15 +84,7 @@ class AddAddressVC: BaseView, UITextFieldDelegate {
     }    
     
   
-    /**
-     This method is used to setup navigation bar.
-     */
-    func setUpNavigationBar() {
-        self.title = "Detail"
-        self.setLeftNavigationItem(with: "Address Book", action: #selector(backClick(_:)))
-        self.setRightNavigationItem(with: "Logout", action: #selector(logoutClick(_:)))
-    }
-    
+   
     /**
      This method is used to validate user input.
         - Returns: Return boolean value to indicate input data is valid or not.
@@ -187,20 +158,23 @@ class AddAddressVC: BaseView, UITextFieldDelegate {
      This method is used to handle back button click.
         - Parameter sender: action button
      */
-    @objc func backClick(_ sender: Any) {
+   
+    @IBAction func btnBackTouchUpInsite(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
+   
     
     /**
      This method is used to handle logout button click.
      - Parameter sender: action button
      */
-    @objc func logoutClick(_ sender: Any) {
+    @IBAction func btnLogOutTouchUpInsite(_ sender: Any) {
         //Set Userdefaults IsLogin key to false
         UserDefaults.standard.set(false, forKey: Constant.UserDefaultsKey.IsLogin)
         
         //Set the root view controller with login screen.
         self.appDelegate.setupRootView()
+       
     }
     
     @IBAction func switchIsActive_ValueChange(_ sender: Any) {
@@ -215,7 +189,7 @@ class AddAddressVC: BaseView, UITextFieldDelegate {
      This method is used to handle delete button click.
         - Parameter sender: action button
      */
-    @IBAction func deleteClick(_ sender: Any) {
+    @IBAction func btnDeleteTouchUpInsite(_ sender: Any) {
 
         if editUser != nil {
             let refreshAlert = UIAlertController(title: "", message: "Do you want to delete  record?", preferredStyle: UIAlertControllerStyle.alert)
@@ -237,7 +211,7 @@ class AddAddressVC: BaseView, UITextFieldDelegate {
      This method is used to handle save/update button click.
         - Parameter sender: action button
      */
-    @IBAction func saveClick(_ sender: Any) {
+    @IBAction func btnSaveTouchUpInsite(_ sender: Any) {
         self.view.endEditing(true)
         if !isValidUserInput() {
             return

@@ -2,8 +2,8 @@
 //  UserModel.swift
 //  AddressBook
 //
-//  Created by mac on 30/01/19.
-//  Copyright © 2019 Differenz System. All rights reserved.
+//  Created by mac on 03/16/2021.
+//  Copyright © 2021 Differenz System. All rights reserved.
 //
 
 import UIKit

@@ -2,8 +2,8 @@
 //  Constant.swift
 //  AddressBook
 //
-//  Created by MohiniPatel on 9/20/17.
-//  Copyright © 2017 Differenz System. All rights reserved.
+//  Created by Differenz System Pvt. Ltd. on 03/16/2021.
+//  Copyright ©  2021 Differenz System Pvt. Ltd. All rights reserved.
 //
 
 import UIKit
@@ -16,6 +16,19 @@ class Constant: NSObject {
         case Phone
         case Pad
     }
+    //MARK: - Color Constants
+    struct AppColor
+    {
+        static let  ThemeColor   = #colorLiteral(red: 0, green: 0.5690457821, blue: 0.5746168494, alpha: 1)
+        static let  ThemeLightColor   = #colorLiteral(red: 0, green: 0.831372549, blue: 0.7098039216, alpha: 1)
+        static let  ThemeDarkColor   = #colorLiteral(red: 0.1333333333, green: 0.3803921569, blue: 0.3803921569, alpha: 1)
+        static let  BorderColor = #colorLiteral(red: 0.1843137255, green: 0.3098039216, blue: 0.3098039216, alpha: 1)
+        static let  ShadowColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        static let  gradiantColorOne = #colorLiteral(red: 0.6352941176, green: 0.8509803922, blue: 0.8078431373, alpha: 1)
+        static let  gradiantColorTwo = #colorLiteral(red: 0.3921568627, green: 0.5921568627, blue: 0.6, alpha: 1)
+        
+    }
+    
     //iPhone Screensize
     struct ScreenSize
     {
@@ -54,6 +67,7 @@ class Constant: NSObject {
             static let kNoInternetConnectionMessage     = "Please check your internet connection."
             static let kCommanErrorMessage              = "Something went wrong please try again later."
             static let kServerErrorMessage              = "There seems to be a problem with the connection. Please try again soon."
+            
         }
 
     }

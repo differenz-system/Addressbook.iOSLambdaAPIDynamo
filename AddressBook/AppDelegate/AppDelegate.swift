@@ -2,15 +2,16 @@
 //  AppDelegate.swift
 //  AddressBook
 //
-//  Created by MohiniPatel on 9/20/17.
-//  Copyright © 2017 Differenz System. All rights reserved.
+//  Created by Differenz System Pvt. Ltd.  on 03/16/2021.
+//  Copyright ©  2021 Differenz System Pvt. Ltd. All rights reserved.
 //
 
 import UIKit
 import CoreData
-import IQKeyboardManagerSwift
 import SVProgressHUD
-
+import IQKeyboardManagerSwift
+import FBSDKLoginKit
+import FBSDKCoreKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -23,12 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Setup RootViewController
         self.setupRootView()
+        //FaceBook login
+        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        IQKeyboardManager.sharedManager().enable = true
+        IQKeyboardManager.shared.enable = true
 
         return true
     }
     
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        let facebookHandler = ApplicationDelegate.shared.application(app, open: url, options: options)
+        return facebookHandler
+    }
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

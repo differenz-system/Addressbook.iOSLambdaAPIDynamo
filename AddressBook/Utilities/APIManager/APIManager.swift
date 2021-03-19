@@ -1,9 +1,9 @@
 //
 //  APIManager.swift
-//  AwakenedMind
-//
-//  Created by mac on 6/2/17.
-//  Copyright © 2017 Differenz System Pvt. Ltd. All rights reserved.
+//  Addressbook
+
+//  Created by mac on 03/16/2021.
+//  Copyright ©  2021 Differenz System Pvt. Ltd. All rights reserved.
 //
 
 import UIKit
@@ -13,12 +13,17 @@ import Alamofire
 
 
 class APIManager: NSObject {
-    //MARK: - Check for internet connection
+ 
+    
+    // MARK: - Check for internet connection
     
     /**
      This method is used to check internet connectivity.
-        - Returns: Return boolean value to indicate device is connected with internet or not
+     - Returns: Return boolean value to indicate device is connected with internet or not
      */
+    
+    
+    
     class func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
@@ -43,68 +48,19 @@ class APIManager: NSObject {
         return (isReachable && !needsConnection)
     }
     
-    //MARK: - Post method with content type application/json
-    
     /**
-     This method is used to make Alamofire post request with parameters.
-        - Parameters:
-            - URLString: URL of request
-            - requestDictionary: Parameter of POST request
-            - withSuccess: Success closure of method
-            - responseDictionary: Response object of POST request
-            - failure: Failure closure of method
-            - error: Failure error
-            - connectionFailed: Network connection faild closure of method
-            - error: Network error
+     This method is used to make Alamofire request with or without parameters.
+     - Parameters:
+     - url: URL of request
+     - method: HTTPMethod of request
+     - parameter: Parameter of request
+     - success: Success closure of method
+     - response: Response object of request
+     - failure: Failure closure of method
+     - error: Failure error
+     - connectionFailed: Network connection faild closure of method
+     - error: Network error
      */
-    
-    class func callURLStringJson(_ urlString: String, withRequest requestDictionary: [String: Any]?, withSuccess success: @escaping (_ responseDictionary: AnyObject) -> Void, failure: @escaping (_ error: String) -> Void, connectionFailed: @escaping (_ error: String) -> Void) {
-        
-        if(Utilities.checkInternetConnection()) {
-            let url = URL(string:urlString)!
-            print(url)
-            
-            do {
-                //Make JSON string from request parameter
-                let jsonData = try JSONSerialization.data(withJSONObject: requestDictionary ?? [:], options: JSONSerialization.WritingOptions.prettyPrinted)
-                let jsonString: String = String(data: jsonData, encoding: String.Encoding.utf8)!
-                print(jsonString)
-                // here "jsonData" is the dictionary encoded in JSON data
-            } catch let error as NSError {
-                print(error)
-            }
-            
-            //Make alamofire POST request
-            Alamofire.request(url, method: .post, parameters: requestDictionary ?? [:], encoding: JSONEncoding.default).responseJSON(completionHandler: { (response) in
-                switch response.result {
-                case .success:
-                    let jsonString: String = String(data: response.data!, encoding: String.Encoding.utf8)!
-                    print(jsonString)
-                    
-                    if response.response?.statusCode == 200 {
-                        success(response.result.value! as AnyObject)
-                    }
-                    else {
-                        let res = response.result.value! as AnyObject
-                        let msg = res["Message"] as? String
-                        if msg != nil {
-                            failure(msg!)
-                        }
-                        else {
-                            failure("")
-                        }
-                    }
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                    failure(error.localizedDescription)
-                }
-            })
-        }
-        else
-        {
-            connectionFailed(Constant.serverAPI.errorMessages.kNoInternetConnectionMessage)
-        }
-    }
     
     class func makeRequest(with url: String, method: HTTPMethod, parameter: [String:Any]?, success: @escaping (_ response: Any) -> Void, failure: @escaping (_ error: String) -> Void, connectionFailed: @escaping (_ error: String) -> Void) {
         
@@ -113,10 +69,9 @@ class APIManager: NSObject {
             if let param = parameter, let data = try? JSONSerialization.data(withJSONObject: param, options: .prettyPrinted) {
                 print(String(data: data, encoding: .utf8) ?? "Nil Param")
             }
-            var headers: [String:String] = [:]
-            headers[kHeader] = Constant.serverAPI.kHeader
-           
-            Alamofire.request(url, method: method, parameters: parameter, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+           // let headers: [String:String] = [:]
+            let headers : HTTPHeaders = [:]
+            AF.request(url, method: method, parameters: parameter, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
                 
                 switch (response.result) {
                 case .success(let value):
@@ -127,12 +82,12 @@ class APIManager: NSObject {
                 case .failure(let error):
                     print(error.localizedDescription)
                     print(error)
-                    failure(error.localizedDescription)
+                    failure(Constant.serverAPI.errorMessages.kCommanErrorMessage)
                 }
             }
         }
         else {
-           connectionFailed(Constant.serverAPI.errorMessages.kNoInternetConnectionMessage)
+            connectionFailed(Constant.serverAPI.errorMessages.kNoInternetConnectionMessage)
         }
     }
     
