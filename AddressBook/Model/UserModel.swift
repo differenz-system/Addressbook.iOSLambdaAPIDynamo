@@ -147,9 +147,20 @@ class UserModel:NSObject, NSCoding {
             SVProgressHUD.dismiss()
             let dict = response as? [String:Any] ?? [:]
             print(dict)
-            let count:Int = dict[kCount] as! Int
-            let scannedScount:Int = dict[kScannedCount] as! Int
-            let dataDict = dict[kItems] as? [[String:Any]] ?? [[:]]
+            
+            guard
+                let count = dict[kCount] as? Int,
+                let scannedScount = dict[kScannedCount] as? Int,
+                let dataDict = dict[kItems] as? [[String: Any]]
+            else {
+                let message = dict["message"] as? String ?? "Invalid server response"
+                failure(message)
+                return
+            }
+            
+//            let count:Int = dict[kCount] as! Int
+//            let scannedScount:Int = dict[kScannedCount] as! Int
+//            let dataDict = dict[kItems] as? [[String:Any]] ?? [[:]]
             
             var addressBookData = [UserModel]()
             for  i in dataDict {

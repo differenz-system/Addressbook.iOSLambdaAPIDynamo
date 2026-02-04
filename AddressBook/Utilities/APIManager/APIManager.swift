@@ -22,8 +22,6 @@ class APIManager: NSObject {
      - Returns: Return boolean value to indicate device is connected with internet or not
      */
     
-    
-    
     class func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
@@ -71,14 +69,24 @@ class APIManager: NSObject {
             }
            // let headers: [String:String] = [:]
             let headers : HTTPHeaders = [:]
-            AF.request(url, method: method, parameters: parameter, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+            
+            let encoding: ParameterEncoding = (method == .get) ? URLEncoding.default : JSONEncoding.default
+            
+            AF.request(url, method: method, parameters: parameter, encoding: encoding, headers: headers).response { (response) in
                 
                 switch (response.result) {
                 case .success(let value):
-                    if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) {
-                        print("Response: \n",String(data: jsonData, encoding: String.Encoding.utf8) ?? "nil")
+                
+//                    if let jsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) {
+//                        print("Response: \n",String(data: jsonData, encoding: String.Encoding.utf8) ?? "nil")
+//                    }
+//                    success(value)
+                    
+                    if let value = value, let jsonData = try? JSONSerialization.jsonObject(with: value) {
+                        print("Response: \n",jsonData)
+                        
+                        success(jsonData)
                     }
-                    success(value)
                 case .failure(let error):
                     print(error.localizedDescription)
                     print(error)
@@ -90,8 +98,4 @@ class APIManager: NSObject {
             connectionFailed(Constant.serverAPI.errorMessages.kNoInternetConnectionMessage)
         }
     }
-    
-    
-    
-
 }

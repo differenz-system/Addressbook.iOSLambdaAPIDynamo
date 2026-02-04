@@ -73,6 +73,9 @@ class AddressListVC: BaseView {
         self.searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .clear
         self.searchBar.setImage(UIImage(), for: .search, state: .normal)
+        
+        self.searchBar.searchTextField.backgroundColor = UIColor.white
+        
         self.navigationController?.isNavigationBarHidden = true
         self.tblAddress.register(UINib(nibName: "ListCell", bundle: nil), forCellReuseIdentifier: "ListCell")
         self.tblAddress.tableFooterView = UIView()
@@ -81,7 +84,12 @@ class AddressListVC: BaseView {
         self.lblNoData.isHidden = true
         self.imgBg.roundBottomCorners(radius: 30)
         self.vwImgBg.roundBottomCorners(radius: 30)
-        vwSearchBar.roundedBorder()
+//        vwSearchBar.roundedBorder()
+        
+        self.searchBar.isUserInteractionEnabled = true
+        vwSearchBar.isUserInteractionEnabled = true
+        
+        vwSearchBar.backgroundColor = UIColor.clear
         
     }
     //MARK: - Button action methods
